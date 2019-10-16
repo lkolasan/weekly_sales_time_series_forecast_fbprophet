@@ -9,26 +9,21 @@ from fbprophet import Prophet
 # To get data from ES
 import pyodbc
 
-"""Data class"""
-
 # Provide the new path here
-directory = r"C:\Users\lakshmana.kolasani\OneDrive - Fred's Inc\projects\demand_forecast\results"
+directory = r"{insert path}"
 os.chdir(directory)  
-#Parameters
+#Parameters to set starting and ending fiscal weeks
 trainstart = 201627
 trainend = 201826
 teststart = 201827
 testend = 201848
 level = 'SKU'
 levelname = 'SKUDescription'
-conn = pyodbc.connect(r'DRIVER={ODBC Driver 17 for SQL Server}; SERVER={MEM-P-SPSQL01\FREDS_BI_DW}; DATABASE={Merchandising_DataMart};Trusted_Connection=yes;')
-levelvalues = list(pd.read_csv(r"C:\Users\lakshmana.kolasani\OneDrive - Fred's Inc\projects\demand_forecast\results\tobeforecastedlist.csv",sep='|')['SKU'])
-levelvalues = pd.read_csv(r"C:\Users\lakshmana.kolasani\OneDrive - Fred's Inc\projects\demand_forecast\skusforforecast.csv",sep='|')['sku']
+conn = pyodbc.connect(r'DRIVER={insert driver}; SERVER={insert server}; DATABASE={insert database};Trusted_Connection=yes;')
+levelvalues = pd.read_csv(r"{insert path to SKUs to forecast}")['SKU']
 a = pd.DataFrame(columns=[level, levelname,'Vendor Number', 'Vendor Name', 'Percent Error(MAPE)',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52])
-# a = pd.DataFrame(columns=[level, levelname, 'Percent Error(MAPE)',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52])
 
 global a
-
 for levelvalue in levelvalues[:500]:
 	levelnamevalue = re.sub(r"[^a-zA-Z0-9]+", ' ', pd.read_sql("select {} from [Merchandising_DataMart].[dbo].[vw_DimItem] where {} = {}".format(levelname,level,levelvalue), conn)[levelname][0])
 	query = ("""
